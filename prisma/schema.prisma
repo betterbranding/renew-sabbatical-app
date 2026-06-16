@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  title     String
+  date      DateTime
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  keys        KeyEntry[]
+  healthItems HealthItem[]
+  goals       Goal[]
+  people      Person[]
+  reflections Reflection[]
+}
+
+model KeyEntry {
+  id        String  @id @default(uuid())
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name      String
+  tags      String
+  time      String?
+  content   String? @default("")
+  order     Int
+}
+
+model HealthItem {
+  id        String    @id @default(uuid())
+  sessionId String
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name      String
+  tags      String?
+  dueDate   DateTime?
+  content   String?   @default("")
+}
+
+model Goal {
+  id        String    @id @default(uuid())
+  sessionId String
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name      String
+  tag       String
+  dueDate   DateTime?
+  completed Boolean   @default(false)
+}
+
+model Person {
+  id        String  @id @default(uuid())
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name      String
+  tag       String
+  contacted Boolean @default(false)
+}
+
+model Reflection {
+  id        String  @id @default(uuid())
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  prompt    String
+  answer    String? @default("")
+}

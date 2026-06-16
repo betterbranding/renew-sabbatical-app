@@ -1,0 +1,1066 @@
+{
+  "app": {
+    "name": "RE:NEW",
+    "tagline": "A Personal Sabbatical Framework",
+    "description": "A recurring 2-day personal sabbatical retreat designed for spiritual renewal, goal setting, and life alignment across 5 key areas: Mental, Physical, Relational, Financial, and Spiritual.",
+    "anchorVerse": "Where there is no counsel, the people fall; But in the multitude of counselors there is safety. \u2014 Proverbs 11:14",
+    "design": {
+      "colorScheme": {
+        "primary": "#0A1628",
+        "secondary": "#1B3A5C",
+        "accent": "#5BA4E6",
+        "background": "#FFFFFF",
+        "cardBackground": "#0A1628",
+        "cardText": "#FFFFFF",
+        "cardHeadline": "#FFFFFF"
+      },
+      "typography": {
+        "headlineFont": "Helvetica Neue, Helvetica, Arial, sans-serif",
+        "bodyFont": "Helvetica Neue, Helvetica, Arial, sans-serif",
+        "headlineWeight": "700",
+        "bodyWeight": "400"
+      },
+      "cardStyle": "Solid dark background with bold white headline text and white readable subtext",
+      "animations": "Smooth page transitions, card entrance animations, scroll-triggered reveals, subtle hover effects"
+    }
+  },
+  "schema": {
+    "sessions": {
+      "id": "string (UUID)",
+      "title": "string",
+      "date": "ISO date string",
+      "status": "completed | in-progress | new"
+    },
+    "keysToTheKingdom": {
+      "id": "string (UUID)",
+      "sessionId": "string (FK)",
+      "name": "string",
+      "tags": [
+        "Confession",
+        "Forgiveness",
+        "Journal",
+        "Repent",
+        "Renounce",
+        "Seek",
+        "Acknowledge",
+        "Worship",
+        "Soak",
+        "Hear",
+        "Confirm"
+      ],
+      "time": "string",
+      "content": "string (user's written entry)"
+    },
+    "hi5Health": {
+      "id": "string (UUID)",
+      "sessionId": "string (FK)",
+      "name": "string (Spiritual Health, Relational Health, Financial Health, Mental Health, Physical Health)",
+      "tags": [
+        "Preparation",
+        "Alignment"
+      ],
+      "dueDate": "ISO date string",
+      "content": "string"
+    },
+    "highFiveGoals": {
+      "id": "string (UUID)",
+      "sessionId": "string (FK)",
+      "name": "string",
+      "tag": "Mental | Physical | Relational | Financial | Spiritual",
+      "dueDate": "ISO date string",
+      "completed": "boolean"
+    },
+    "highFivePeople": {
+      "id": "string (UUID)",
+      "sessionId": "string (FK)",
+      "name": "string",
+      "tag": "Mental Health | Spiritual Health | Physical Health | Relational Health | Financial Health",
+      "contacted": "boolean"
+    }
+  },
+  "sessions": [
+    {
+      "id": "session-jan-2024",
+      "title": "RE:NEW (Jan 2024)",
+      "date": "2024-01-01",
+      "status": "completed",
+      "day1": {
+        "keysToTheKingdom": [
+          {
+            "name": "Reverence",
+            "tags": [
+              "Acknowledge"
+            ],
+            "time": "10 mins"
+          },
+          {
+            "name": "Release",
+            "tags": [
+              "Confession",
+              "Forgiveness"
+            ],
+            "time": "30 mins"
+          },
+          {
+            "name": "Repent",
+            "tags": [
+              "Repent",
+              "Renounce"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Respond",
+            "tags": [
+              "Journal",
+              "Seek"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Receive",
+            "tags": [
+              "Soak",
+              "Hear",
+              "Journal",
+              "Confirm"
+            ],
+            "time": "1-2 hours"
+          },
+          {
+            "name": "Day 1 Overview",
+            "tags": [],
+            "time": ""
+          }
+        ]
+      },
+      "day2": {
+        "hi5Health": [
+          {
+            "name": "Day 2 Overview",
+            "tags": [
+              "Preparation",
+              "Alignment"
+            ],
+            "dueDate": null
+          },
+          {
+            "name": "Spiritual Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Relational Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Financial Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Mental Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Physical Health",
+            "dueDate": "2026-04-30"
+          }
+        ],
+        "highFiveGoals": [
+          {
+            "name": "Finish Building Tables",
+            "tag": "Mental",
+            "dueDate": "2023-11-18",
+            "completed": false
+          },
+          {
+            "name": "Lose 4\" in waist",
+            "tag": "Physical",
+            "dueDate": "2023-10-31",
+            "completed": false
+          },
+          {
+            "name": "Anniversary Trip",
+            "tag": "Relational",
+            "dueDate": "2023-11-03",
+            "completed": false
+          },
+          {
+            "name": "Pay off RH Refunds",
+            "tag": "Financial",
+            "dueDate": "2023-12-31",
+            "completed": false
+          },
+          {
+            "name": "Publish Sabbatical Template",
+            "tag": "Spiritual",
+            "dueDate": "2023-12-31",
+            "completed": false
+          }
+        ],
+        "highFivePeople": [
+          {
+            "name": "Mentor 1",
+            "tag": "Mental Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 2",
+            "tag": "Spiritual Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 3",
+            "tag": "Physical Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 4",
+            "tag": "Relational Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 5",
+            "tag": "Financial Health",
+            "contacted": false
+          }
+        ],
+        "reflections": {
+          "howWillIFeel": "",
+          "whatHappensIfIDont": ""
+        }
+      }
+    },
+    {
+      "id": "session-weekend-2024",
+      "title": "RE:NEW Weekend",
+      "date": "2024-07-11",
+      "status": "completed",
+      "day1": {
+        "keysToTheKingdom": [
+          {
+            "name": "Reverence",
+            "tags": [
+              "Acknowledge"
+            ],
+            "time": "10 mins"
+          },
+          {
+            "name": "Release",
+            "tags": [
+              "Confession",
+              "Forgiveness"
+            ],
+            "time": "30 mins"
+          },
+          {
+            "name": "Repent",
+            "tags": [
+              "Repent",
+              "Renounce"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Respond",
+            "tags": [
+              "Journal",
+              "Seek"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Receive",
+            "tags": [
+              "Soak",
+              "Hear",
+              "Journal",
+              "Confirm"
+            ],
+            "time": "1-2 hours"
+          },
+          {
+            "name": "Day 1 Overview",
+            "tags": [],
+            "time": ""
+          }
+        ]
+      },
+      "day2": {
+        "hi5Health": [
+          {
+            "name": "Spiritual Health",
+            "dueDate": null
+          },
+          {
+            "name": "Relational Health",
+            "dueDate": null
+          },
+          {
+            "name": "Financial Health",
+            "dueDate": null
+          },
+          {
+            "name": "Mental Health",
+            "dueDate": null
+          },
+          {
+            "name": "Physical Health",
+            "dueDate": null
+          }
+        ],
+        "highFiveGoals": [
+          {
+            "name": "Goal #1",
+            "tag": "Mental",
+            "dueDate": "2023-11-18",
+            "completed": false
+          },
+          {
+            "name": "Goal #2",
+            "tag": "Physical",
+            "dueDate": "2023-10-31",
+            "completed": false
+          },
+          {
+            "name": "Goal #3",
+            "tag": "Relational",
+            "dueDate": "2023-11-03",
+            "completed": false
+          },
+          {
+            "name": "Goal #4",
+            "tag": "Financial",
+            "dueDate": "2023-12-31",
+            "completed": false
+          },
+          {
+            "name": "Goal #5",
+            "tag": "Spiritual",
+            "dueDate": "2023-12-31",
+            "completed": false
+          }
+        ],
+        "highFivePeople": [
+          {
+            "name": "Mentor 1",
+            "tag": "Mental Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 2",
+            "tag": "Spiritual Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 3",
+            "tag": "Physical Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 4",
+            "tag": "Relational Health",
+            "contacted": false
+          },
+          {
+            "name": "Mentor 5",
+            "tag": "Financial Health",
+            "contacted": false
+          }
+        ],
+        "reflections": {
+          "howWillIFeel": "",
+          "whatHappensIfIDont": ""
+        }
+      }
+    },
+    {
+      "id": "session-jan-2025",
+      "title": "RE:NEW (1)",
+      "date": "2025-01-31",
+      "status": "completed",
+      "day1": {
+        "keysToTheKingdom": [
+          {
+            "name": "Reverence",
+            "tags": [
+              "Acknowledge"
+            ],
+            "time": "10 mins"
+          },
+          {
+            "name": "Release",
+            "tags": [
+              "Confession",
+              "Forgiveness"
+            ],
+            "time": "30 mins"
+          },
+          {
+            "name": "Repent",
+            "tags": [
+              "Repent",
+              "Renounce"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Respond",
+            "tags": [
+              "Journal",
+              "Seek"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Receive",
+            "tags": [
+              "Soak",
+              "Hear",
+              "Journal",
+              "Confirm"
+            ],
+            "time": "1-2 hours"
+          },
+          {
+            "name": "Day 1 Overview",
+            "tags": [],
+            "time": ""
+          }
+        ]
+      },
+      "day2": {
+        "hi5Health": [
+          {
+            "name": "Spiritual Health",
+            "dueDate": null
+          },
+          {
+            "name": "Relational Health",
+            "dueDate": null
+          },
+          {
+            "name": "Financial Health",
+            "dueDate": null
+          },
+          {
+            "name": "Mental Health",
+            "dueDate": null
+          },
+          {
+            "name": "Physical Health",
+            "dueDate": null
+          }
+        ],
+        "highFiveGoals": [
+          {
+            "name": "Finish Building Tables",
+            "tag": "Mental",
+            "dueDate": "2023-11-18",
+            "completed": false
+          },
+          {
+            "name": "Lose 4\" in waist",
+            "tag": "Physical",
+            "dueDate": "2023-10-31",
+            "completed": false
+          },
+          {
+            "name": "Anniversary Trip",
+            "tag": "Relational",
+            "dueDate": "2023-11-03",
+            "completed": false
+          },
+          {
+            "name": "Pay off RH Refunds",
+            "tag": "Financial",
+            "dueDate": "2023-12-31",
+            "completed": false
+          },
+          {
+            "name": "Publish Sabbatical Template",
+            "tag": "Spiritual",
+            "dueDate": "2023-12-31",
+            "completed": false
+          }
+        ],
+        "highFivePeople": [
+          {
+            "name": "Mentor 1",
+            "tag": "Mental Health",
+            "contacted": false
+          },
+          {
+            "name": "Roger",
+            "tag": "Spiritual Health",
+            "contacted": false
+          },
+          {
+            "name": "Brandon",
+            "tag": "Physical Health",
+            "contacted": false
+          },
+          {
+            "name": "John",
+            "tag": "Relational Health",
+            "contacted": false
+          },
+          {
+            "name": "Paola",
+            "tag": "Financial Health",
+            "contacted": false
+          }
+        ],
+        "reflections": {
+          "howWillIFeel": "",
+          "whatHappensIfIDont": ""
+        }
+      }
+    },
+    {
+      "id": "session-feb-2025",
+      "title": "RE:NEW | 02-2025",
+      "date": "2025-02-01",
+      "status": "completed",
+      "day1": {
+        "keysToTheKingdom": [
+          {
+            "name": "Reverence",
+            "tags": [
+              "Acknowledge"
+            ],
+            "time": "10 mins"
+          },
+          {
+            "name": "Release",
+            "tags": [
+              "Confession",
+              "Forgiveness"
+            ],
+            "time": "30 mins"
+          },
+          {
+            "name": "Repent",
+            "tags": [
+              "Repent",
+              "Renounce"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Respond",
+            "tags": [
+              "Journal",
+              "Seek"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Receive",
+            "tags": [
+              "Soak",
+              "Hear",
+              "Journal",
+              "Confirm"
+            ],
+            "time": "1-2 hours"
+          },
+          {
+            "name": "Day 1 Overview",
+            "tags": [],
+            "time": ""
+          }
+        ]
+      },
+      "day2": {
+        "hi5Health": [
+          {
+            "name": "Day 2 Overview",
+            "tags": [
+              "Preparation",
+              "Alignment"
+            ],
+            "dueDate": null
+          },
+          {
+            "name": "Spiritual Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Relational Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Financial Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Mental Health",
+            "dueDate": "2026-04-30"
+          },
+          {
+            "name": "Physical Health",
+            "dueDate": "2026-04-30"
+          }
+        ],
+        "highFiveGoals": [
+          {
+            "name": "",
+            "tag": "Mental",
+            "dueDate": null,
+            "completed": false
+          },
+          {
+            "name": "",
+            "tag": "Physical",
+            "dueDate": null,
+            "completed": false
+          },
+          {
+            "name": "",
+            "tag": "Relational",
+            "dueDate": null,
+            "completed": false
+          },
+          {
+            "name": "",
+            "tag": "Financial",
+            "dueDate": null,
+            "completed": false
+          },
+          {
+            "name": "",
+            "tag": "Spiritual",
+            "dueDate": null,
+            "completed": false
+          }
+        ],
+        "highFivePeople": [
+          {
+            "name": "David Hicks",
+            "tag": "Mental Health",
+            "contacted": false
+          },
+          {
+            "name": "Pat Gray",
+            "tag": "Spiritual Health",
+            "contacted": false
+          },
+          {
+            "name": "Adrian DelGado",
+            "tag": "Physical Health",
+            "contacted": false
+          },
+          {
+            "name": "Robert Harris",
+            "tag": "Relational Health",
+            "contacted": false
+          },
+          {
+            "name": "Paola Guzman",
+            "tag": "Financial Health",
+            "contacted": false
+          }
+        ],
+        "reflections": {
+          "howWillIFeel": "",
+          "whatHappensIfIDont": ""
+        }
+      }
+    },
+    {
+      "id": "session-aug-2025",
+      "title": "RE:NEW - Aug 2025",
+      "date": "2025-08-09",
+      "status": "completed",
+      "day1": {
+        "keysToTheKingdom": [
+          {
+            "name": "Reverence",
+            "tags": [
+              "Acknowledge"
+            ],
+            "time": "10 mins"
+          },
+          {
+            "name": "Release",
+            "tags": [
+              "Confession",
+              "Forgiveness"
+            ],
+            "time": "30 mins"
+          },
+          {
+            "name": "Repent",
+            "tags": [
+              "Repent",
+              "Renounce"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Respond",
+            "tags": [
+              "Journal",
+              "Seek"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Receive",
+            "tags": [
+              "Soak",
+              "Hear",
+              "Journal",
+              "Confirm"
+            ],
+            "time": "1-2 hours"
+          },
+          {
+            "name": "Day 1 Overview",
+            "tags": [],
+            "time": ""
+          }
+        ]
+      },
+      "day2": {
+        "hi5Health": [
+          {
+            "name": "Spiritual Health",
+            "dueDate": null
+          },
+          {
+            "name": "Relational Health",
+            "dueDate": null
+          },
+          {
+            "name": "Financial Health",
+            "dueDate": null
+          },
+          {
+            "name": "Mental Health",
+            "dueDate": null
+          },
+          {
+            "name": "Physical Health",
+            "dueDate": null
+          }
+        ],
+        "highFiveGoals": [
+          {
+            "name": "Finish Building Tables",
+            "tag": "Mental",
+            "dueDate": "2023-11-18",
+            "completed": false
+          },
+          {
+            "name": "Lose 4\" in waist",
+            "tag": "Physical",
+            "dueDate": "2023-10-31",
+            "completed": false
+          },
+          {
+            "name": "Anniversary Trip",
+            "tag": "Relational",
+            "dueDate": "2023-11-03",
+            "completed": false
+          },
+          {
+            "name": "Pay off RH Refunds",
+            "tag": "Financial",
+            "dueDate": "2023-12-31",
+            "completed": false
+          },
+          {
+            "name": "Publish Sabbatical Template",
+            "tag": "Spiritual",
+            "dueDate": "2023-12-31",
+            "completed": false
+          }
+        ],
+        "highFivePeople": [
+          {
+            "name": "Mentor 1",
+            "tag": "Mental Health",
+            "contacted": false
+          },
+          {
+            "name": "Roger",
+            "tag": "Spiritual Health",
+            "contacted": false
+          },
+          {
+            "name": "Brandon",
+            "tag": "Physical Health",
+            "contacted": false
+          },
+          {
+            "name": "John",
+            "tag": "Relational Health",
+            "contacted": false
+          },
+          {
+            "name": "Paola",
+            "tag": "Financial Health",
+            "contacted": false
+          }
+        ],
+        "reflections": {
+          "howWillIFeel": "",
+          "whatHappensIfIDont": ""
+        }
+      }
+    },
+    {
+      "id": "session-jan-2026",
+      "title": "RE:NEW | Jan 2026",
+      "date": "2026-01-04",
+      "status": "completed",
+      "day1": {
+        "keysToTheKingdom": [
+          {
+            "name": "Reverence",
+            "tags": [
+              "Acknowledge"
+            ],
+            "time": "10 mins"
+          },
+          {
+            "name": "Release",
+            "tags": [
+              "Confession",
+              "Forgiveness"
+            ],
+            "time": "30 mins"
+          },
+          {
+            "name": "Repent",
+            "tags": [
+              "Repent",
+              "Renounce"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Respond",
+            "tags": [
+              "Journal",
+              "Seek"
+            ],
+            "time": ""
+          },
+          {
+            "name": "Receive",
+            "tags": [
+              "Soak",
+              "Hear",
+              "Journal",
+              "Confirm"
+            ],
+            "time": "1-2 hours"
+          },
+          {
+            "name": "Day 1 Overview",
+            "tags": [],
+            "time": ""
+          }
+        ]
+      },
+      "day2": {
+        "hi5Health": [
+          {
+            "name": "Spiritual Health",
+            "dueDate": null
+          },
+          {
+            "name": "Relational Health",
+            "dueDate": null
+          },
+          {
+            "name": "Financial Health",
+            "dueDate": null
+          },
+          {
+            "name": "Mental Health",
+            "dueDate": null
+          },
+          {
+            "name": "Physical Health",
+            "dueDate": null
+          }
+        ],
+        "highFiveGoals": [
+          {
+            "name": "Setup Notion Habit-Tracker",
+            "tag": "Mental",
+            "dueDate": "2026-04-30",
+            "completed": false
+          },
+          {
+            "name": "Schedule Hernia Surgery",
+            "tag": "Physical",
+            "dueDate": "2026-04-30",
+            "completed": false
+          },
+          {
+            "name": "",
+            "tag": "Relational",
+            "dueDate": "2026-04-30",
+            "completed": false
+          },
+          {
+            "name": "$15K/mth income",
+            "tag": "Financial",
+            "dueDate": "2026-04-30",
+            "completed": false
+          },
+          {
+            "name": "Read Celebration of Discipline",
+            "tag": "Spiritual",
+            "dueDate": "2026-04-30",
+            "completed": false
+          }
+        ],
+        "highFivePeople": [
+          {
+            "name": "Find a Therapist",
+            "tag": "Mental Health",
+            "contacted": false
+          },
+          {
+            "name": "",
+            "tag": "Spiritual Health",
+            "contacted": false
+          },
+          {
+            "name": "",
+            "tag": "Physical Health",
+            "contacted": false
+          },
+          {
+            "name": "John Critz",
+            "tag": "Relational Health",
+            "contacted": false
+          },
+          {
+            "name": "",
+            "tag": "Financial Health",
+            "contacted": false
+          }
+        ],
+        "reflections": {
+          "howWillIFeel": "",
+          "whatHappensIfIDont": ""
+        }
+      }
+    }
+  ],
+  "day1Process": {
+    "description": "Keys to the Kingdom - A guided spiritual process for Day 1 of each RE:NEW session",
+    "steps": [
+      {
+        "order": 1,
+        "name": "Reverence",
+        "tags": [
+          "Acknowledge"
+        ],
+        "suggestedTime": "10 mins",
+        "description": "Begin with acknowledging God's presence and sovereignty."
+      },
+      {
+        "order": 2,
+        "name": "Release",
+        "tags": [
+          "Confession",
+          "Forgiveness"
+        ],
+        "suggestedTime": "30 mins",
+        "description": "Confess and release through forgiveness."
+      },
+      {
+        "order": 3,
+        "name": "Repent",
+        "tags": [
+          "Repent",
+          "Renounce"
+        ],
+        "suggestedTime": "",
+        "description": "Repent and renounce things that don't align with your values."
+      },
+      {
+        "order": 4,
+        "name": "Respond",
+        "tags": [
+          "Journal",
+          "Seek"
+        ],
+        "suggestedTime": "",
+        "description": "Journal your responses and seek direction."
+      },
+      {
+        "order": 5,
+        "name": "Receive",
+        "tags": [
+          "Soak",
+          "Hear",
+          "Journal",
+          "Confirm"
+        ],
+        "suggestedTime": "1-2 hours",
+        "description": "Soak in God's presence, hear, journal, and confirm what you receive."
+      }
+    ]
+  },
+  "day2Sections": {
+    "hi5Health": {
+      "description": "Assessment of 5 key health areas as preparation and alignment",
+      "areas": [
+        "Spiritual Health",
+        "Mental Health",
+        "Physical Health",
+        "Relational Health",
+        "Financial Health"
+      ],
+      "tags": [
+        "Preparation",
+        "Alignment"
+      ]
+    },
+    "highFiveGoals": {
+      "description": "One big 'Stake in the Ground' goal per life area - a declaration to improve",
+      "categories": [
+        "Mental",
+        "Physical",
+        "Relational",
+        "Financial",
+        "Spiritual"
+      ],
+      "fields": [
+        "name",
+        "tag",
+        "dueDate",
+        "completed"
+      ]
+    },
+    "highFivePeople": {
+      "description": "One accountability person per health area",
+      "categories": [
+        "Mental Health",
+        "Spiritual Health",
+        "Physical Health",
+        "Relational Health",
+        "Financial Health"
+      ],
+      "fields": [
+        "name",
+        "tag",
+        "contacted"
+      ]
+    },
+    "reflections": {
+      "prompts": [
+        "How will I feel if I accomplish my High Five goals?",
+        "What will happen if I don't accomplish my High Five?"
+      ]
+    }
+  }
+}
