@@ -3,69 +3,156 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Session {
-  id        String   @id @default(uuid())
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts    Account[]
+  sessions    AuthSession[]
+  sabbaticals Sabbatical[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model AuthSession {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ── RE:NEW Domain Models ──
+
+model Sabbatical {
+  id        String   @id @default(cuid())
+  userId    String
   title     String
   date      DateTime
   status    String   @default("new")
+  isDemo    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  keys        KeyEntry[]
-  healthItems HealthItem[]
-  goals       Goal[]
-  people      Person[]
-  reflections Reflection[]
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyEntries    KeyEntry[]
+  healthEntries HealthEntry[]
+  healthGoals   HealthGoal[]
+  goals         Goal[]
+  people        Person[]
+  reflections   Reflection[]
+
+  @@index([userId])
 }
 
 model KeyEntry {
-  id        String  @id @default(uuid())
-  sessionId String
-  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  name      String
-  tags      String
-  time      String?
-  content   String? @default("")
-  order     Int
+  id           String  @id @default(cuid())
+  sabbaticalId String
+  moduleKey    String
+  name         String
+  tags         String  @default("[]")
+  timeAllotted String  @default("")
+  userResponse String  @default("") @db.Text
+  completed    Boolean @default(false)
+  sortOrder    Int     @default(0)
+
+  sabbatical Sabbatical @relation(fields: [sabbaticalId], references: [id], onDelete: Cascade)
+  @@index([sabbaticalId])
 }
 
-model HealthItem {
-  id        String    @id @default(uuid())
-  sessionId String
-  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  name      String
-  tags      String?
-  dueDate   DateTime?
-  content   String?   @default("")
+model HealthEntry {
+  id               String    @id @default(cuid())
+  sabbaticalId     String
+  area             String
+  assessment       String    @default("") @db.Text
+  dueDate          DateTime?
+  completed        Boolean   @default(false)
+  feelIfAccomplish String    @default("") @db.Text
+  whatIfDont        String   @default("") @db.Text
+
+  sabbatical Sabbatical @relation(fields: [sabbaticalId], references: [id], onDelete: Cascade)
+  @@index([sabbaticalId])
+}
+
+model HealthGoal {
+  id           String    @id @default(cuid())
+  sabbaticalId String
+  area         String
+  goalText     String    @default("")
+  status       String    @default("Not started")
+  dueDate      DateTime?
+  sortOrder    Int       @default(0)
+
+  sabbatical Sabbatical @relation(fields: [sabbaticalId], references: [id], onDelete: Cascade)
+  @@index([sabbaticalId])
 }
 
 model Goal {
-  id        String    @id @default(uuid())
-  sessionId String
-  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  name      String
-  tag       String
-  dueDate   DateTime?
-  completed Boolean   @default(false)
+  id           String    @id @default(cuid())
+  sabbaticalId String
+  name         String    @default("")
+  area         String
+  dueDate      DateTime?
+  completed    Boolean   @default(false)
+  notes        String    @default("") @db.Text
+
+  sabbatical Sabbatical @relation(fields: [sabbaticalId], references: [id], onDelete: Cascade)
+  @@index([sabbaticalId])
 }
 
 model Person {
-  id        String  @id @default(uuid())
-  sessionId String
-  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  name      String
-  tag       String
-  contacted Boolean @default(false)
+  id           String  @id @default(cuid())
+  sabbaticalId String
+  name         String  @default("")
+  area         String
+  contacted    Boolean @default(false)
+  notes        String  @default("") @db.Text
+
+  sabbatical Sabbatical @relation(fields: [sabbaticalId], references: [id], onDelete: Cascade)
+  @@index([sabbaticalId])
 }
 
 model Reflection {
-  id        String  @id @default(uuid())
-  sessionId String
-  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  prompt    String
-  answer    String? @default("")
+  id           String @id @default(cuid())
+  sabbaticalId String
+  howWillIFeel String @default("") @db.Text
+  whatIfIDont  String @default("") @db.Text
+
+  sabbatical Sabbatical @relation(fields: [sabbaticalId], references: [id], onDelete: Cascade)
+  @@index([sabbaticalId])
 }

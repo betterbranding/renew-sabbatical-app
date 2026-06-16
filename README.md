@@ -1,66 +1,91 @@
-# RE:NEW — Personal Sabbatical App
+# RE:NEW — Personal Sabbatical Framework
 
-A stunning, captivating web application for tracking recurring 2-day personal sabbatical retreats.
+A guided 2-day sabbatical web app for spiritual renewal and life planning.
 
-## 🎨 Design
+## Stack
 
-- **Colors:** Navy (#0A1628), Light Blue (#5BA4E6), White, Black
-- **Typography:** Helvetica Neue, Bold headlines
-- **Cards:** Dark navy backgrounds with bold white text
-- **Animations:** Spring-based card entrances, scroll reveals, page transitions, confetti on goal completion
+- **Next.js 15** (App Router)
+- **Prisma** + **Supabase** (PostgreSQL)
+- **NextAuth.js** (Google OAuth)
+- **Vercel** (deployment)
 
-## 📋 Structure
+## Getting Started
 
-Each RE:NEW session is a 2-day retreat:
+### 1. Clone & Install
 
-### Day 1 — Keys to the Kingdom
-A guided 5-step spiritual process:
-1. **Reverence** (Acknowledge) — 10 mins
-2. **Release** (Confession, Forgiveness) — 30 mins
-3. **Repent** (Repent, Renounce)
-4. **Respond** (Journal, Seek)
-5. **Receive** (Soak, Hear, Journal, Confirm) — 1-2 hours
-
-### Day 2 — High Five
-Goal setting across 5 life areas with accountability:
-- **Hi 5 Health Check** — Spiritual, Mental, Physical, Relational, Financial
-- **High Five Goals** — One "Stake in the Ground" per area
-- **Reflection Prompts** — What accomplishing/not accomplishing goals means
-- **High Five People** — One accountability partner per area
-
-> ✝️ *"Where there is no counsel, the people fall; But in the multitude of counselors there is safety."* — Proverbs 11:14
-
-## 🛠 Tech Stack
-
-- **Framework:** Next.js 14+ (App Router)
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **Database:** SQLite via Prisma
-- **Deployment:** Vercel-ready
-
-## 📁 Project Structure
-
-```
-├── database/seed-data.json    # 6 sessions from Notion
-├── docs/APP-SPEC.md           # Full build specification
-├── prisma/schema.prisma       # Database schema
-└── README.md
+```bash
+git clone https://github.com/betterbranding/renew-sabbatical-app.git
+cd renew-sabbatical-app
+npm install
 ```
 
-## 🚀 Getting Started
+### 2. Set Up Supabase
 
-1. Clone this repo
-2. Follow the full spec in `docs/APP-SPEC.md`
-3. Use the seed data in `database/seed-data.json`
+1. Create a project at [supabase.com](https://supabase.com)
+2. Copy the connection string from Settings → Database → Connection string (URI)
 
-## 📊 Seed Data
+### 3. Set Up Google OAuth
 
-Ships with 6 pre-existing sessions:
-| Session | Date |
-|---------|------|
-| RE:NEW (Jan 2024) | January 2024 |
-| RE:NEW Weekend | July 2024 |
-| RE:NEW (1) | January 2025 |
-| RE:NEW 02-2025 | February 2025 |
-| RE:NEW Aug 2025 | August 2025 |
-| RE:NEW Jan 2026 | January 2026 |
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+2. Create OAuth 2.0 credentials
+3. Add `http://localhost:3000/api/auth/callback/google` as an authorized redirect URI
+
+### 4. Configure Environment
+
+```bash
+cp .env.example .env
+# Fill in your values
+```
+
+### 5. Push Database Schema
+
+```bash
+npx prisma db push
+```
+
+### 6. Run Dev Server
+
+```bash
+npm run dev
+```
+
+### 7. Seed Historical Data (Greg only)
+
+After your first login, find your userId in the database, then:
+
+```bash
+npx tsx prisma/seed.ts YOUR_USER_ID
+```
+
+## Architecture
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # REST API routes
+│   ├── auth/signin/       # Login page
+│   ├── session/[id]/      # Session view
+│   └── page.tsx           # Landing page
+├── components/            # React components
+│   ├── Landing.tsx        # Session list + new session
+│   ├── SessionView.tsx    # Full session (Day 1 + Day 2)
+│   └── KeysModule.tsx     # Day 1 guided module
+├── lib/                   # Utilities
+│   ├── api.ts             # Client-side API wrapper
+│   ├── auth.ts            # NextAuth config
+│   ├── content.ts         # Lesson curriculum content
+│   ├── prisma.ts          # Prisma client singleton
+│   └── seed-demo.ts       # Demo data for new users
+└── styles/
+    └── globals.css        # App styles
+```
+
+## Framework
+
+**Day 1 — Keys to the Kingdom**: Reverence → Release → Repent → Respond → Receive
+
+**Day 2 — Hi 5**: Health Assessment (5 areas) → SMART Goals → Accountability People → Reflection
+
+## License
+
+Private — The Better Branding Co.
