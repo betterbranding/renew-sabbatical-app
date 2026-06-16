@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useState, useRef, useEffect } from 'react';
-import { DAY1_MODULES, LessonStep, LessonModule } from '../utils/content';
-import { KeyEntry } from '../types';
+import { DAY1_MODULES, LessonStep, LessonModule } from '@/lib/content';
+import { KeyEntry } from '@/types';
 
 // ── Helper: render markdown bold **text** as <strong> ──
 function renderText(text: string): React.ReactNode[] {

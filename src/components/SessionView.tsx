@@ -1,17 +1,16 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
-import { Session, KeyEntry, HealthEntry, HealthGoal, Goal, Person, Reflection, DAY1_MODULES as DAY1_MODULE_DEFS, HEALTH_AREAS } from '../types';
-import { DAY2_OVERVIEW, ANCHOR_SCRIPTURE, DAY2_TRANSITIONS } from '../utils/content';
-import {
-  getKeysEntries, getHealthEntries, getGoals, getPeople, getReflection,
-  upsertKeyEntry, upsertHealthEntry, upsertGoal, upsertPerson, upsertReflection,
-  updateSessionStatus, seedNewSession,
-  getHealthGoals, addHealthGoal, updateHealthGoal, deleteHealthGoal,
-} from '../utils/db';
+import { SabbaticalFull, KeyEntry, HealthEntry, HealthGoal, Goal, Person, Reflection, HEALTH_AREAS } from '@/types';
+import { DAY1_MODULES as DAY1_MODULE_DEFS } from '@/types';
+import { DAY2_OVERVIEW, ANCHOR_SCRIPTURE, DAY2_TRANSITIONS } from '@/lib/content';
+import * as api from '@/lib/api';
 import { KeysModule } from './KeysModule';
 
 interface SessionViewProps {
-  session: Session;
+  sabbatical: SabbaticalFull;
   onBack: () => void;
+  onUpdate: (s: SabbaticalFull) => void;
 }
 
 type DayTab = 'day1' | 'day2';
@@ -514,7 +513,7 @@ const PersonRow: React.FC<{ person: Person; onSave: (p: Person) => void }> = ({ 
 // MAIN SESSION VIEW
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-export const SessionView: React.FC<SessionViewProps> = ({ session, onBack }) => {
+export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, onUpdate }) => {
   const [day, setDay] = useState<DayTab>('day1');
   const [keys, setKeys] = useState<KeyEntry[]>([]);
   const [health, setHealth] = useState<HealthEntry[]>([]);
@@ -525,28 +524,28 @@ export const SessionView: React.FC<SessionViewProps> = ({ session, onBack }) => 
   const [loading, setLoading] = useState(true);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
 
-  useEffect(() => { loadData(); }, [session.id]);
+  useEffect(() => { loadData(); }, [sabbatical.id]);
 
   async function loadData() {
     setLoading(true);
     const [k, h, hg, g, p, r] = await Promise.all([
-      getKeysEntries(session.id),
-      getHealthEntries(session.id),
-      getHealthGoals(session.id),
-      getGoals(session.id),
-      getPeople(session.id),
-      getReflection(session.id),
+      getKeysEntries(sabbatical.id),
+      getHealthEntries(sabbatical.id),
+      getHealthGoals(sabbatical.id),
+      getGoals(sabbatical.id),
+      getPeople(sabbatical.id),
+      getReflection(sabbatical.id),
     ]);
 
     if (k.length === 0 && h.length === 0) {
-      await seedNewSession(session.id);
+      await seedNewSession(sabbatical.id);
       const [k2, h2, hg2, g2, p2, r2] = await Promise.all([
-        getKeysEntries(session.id),
-        getHealthEntries(session.id),
-        getHealthGoals(session.id),
-        getGoals(session.id),
-        getPeople(session.id),
-        getReflection(session.id),
+        getKeysEntries(sabbatical.id),
+        getHealthEntries(sabbatical.id),
+        getHealthGoals(sabbatical.id),
+        getGoals(sabbatical.id),
+        getPeople(sabbatical.id),
+        getReflection(sabbatical.id),
       ]);
       setKeys(k2); setHealth(h2); setHealthGoals(hg2); setGoals(g2); setPeople(p2); setReflection(r2);
     } else {
@@ -556,7 +555,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ session, onBack }) => 
   }
 
   async function refreshHealthGoals() {
-    const hg = await getHealthGoals(session.id);
+    const hg = await getHealthGoals(sabbatical.id);
     setHealthGoals(hg);
   }
 
@@ -564,7 +563,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ session, onBack }) => 
   function handleSaveKey(entry: KeyEntry) {
     setKeys(prev => prev.map(k => (k.id === entry.id || (k.module_key === entry.module_key && k.session_id === entry.session_id)) ? entry : k));
     upsertKeyEntry(entry);
-    updateSessionStatus(session.id, 'in-progress');
+    api.updateSession(sabbatical.id, { status: 'in-progress' });
   }
   function handleSaveHealth(entry: HealthEntry) {
     setHealth(prev => prev.map(h => (h.id === entry.id || (h.area === entry.area && h.session_id === entry.session_id)) ? entry : h));
@@ -625,9 +624,9 @@ export const SessionView: React.FC<SessionViewProps> = ({ session, onBack }) => 
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           All Sessions
         </button>
-        <h1 style={{ fontSize: '28px', fontWeight: 900, margin: '0 0 4px', letterSpacing: '-0.02em' }}>{session.title}</h1>
+        <h1 style={{ fontSize: '28px', fontWeight: 900, margin: '0 0 4px', letterSpacing: '-0.02em' }}>{sabbatical.title}</h1>
         <p style={{ fontSize: '13px', opacity: 0.4, margin: 0 }}>
-          {new Date(session.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+          {new Date(sabbatical.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
         </p>
       </div>
 
@@ -768,7 +767,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ session, onBack }) => 
                 key={h.id || i}
                 entry={h}
                 goals={goalsForArea(h.area)}
-                sessionId={session.id}
+                sessionId={sabbatical.id}
                 onSaveEntry={handleSaveHealth}
                 onGoalsChanged={refreshHealthGoals}
               />

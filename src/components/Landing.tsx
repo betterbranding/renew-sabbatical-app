@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { Session } from '../types';
+'use client';
+
+import { useState } from 'react';
+import { Sabbatical } from '@/types';
 import { Plus, BookOpen, ChevronRight, Calendar, CheckCircle, Clock } from 'lucide-react';
-import { RENEW_LOGO_BASE64 } from '../utils/logo';
+import { RENEW_LOGO_BASE64 } from '@/lib/logo';
 
 interface LandingProps {
-  sessions: Session[];
-  onSelectSession: (s: Session) => void;
+  sessions: Sabbatical[];
+  userName?: string;
+  onSelectSession: (s: Sabbatical) => void;
   onNewSession: (title: string, date: string) => void;
 }
 
-export const Landing: React.FC<LandingProps> = ({ sessions, onSelectSession, onNewSession }) => {
+export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSession, onNewSession }) => {
   const [showNew, setShowNew] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDate, setNewDate] = useState(new Date().toISOString().split('T')[0]);
