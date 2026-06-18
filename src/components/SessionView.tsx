@@ -654,9 +654,9 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
                 flex: 1, padding: '14px', borderRadius: '11px', fontWeight: 800, fontSize: '14px',
                 cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 fontFamily: 'inherit',
-                background: day === d ? '#0a2540' : 'rgba(255,255,255,0.08)',
-                color: day === d ? 'white' : 'rgba(255,255,255,0.55)',
-                border: day === d ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.12)',
+                background: day === d ? '#0a2540' : 'rgba(255,255,255,0.12)',
+                color: day === d ? 'white' : 'rgba(255,255,255,0.65)',
+                border: day === d ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.2)',
                 transition: 'all 0.3s ease',
               }}
             >
