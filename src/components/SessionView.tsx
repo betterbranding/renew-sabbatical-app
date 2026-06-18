@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { SabbaticalFull, KeyEntry, HealthEntry, HealthGoal, Goal, Person, Reflection, HEALTH_AREAS } from '@/types';
-import { DAY1_MODULES as DAY1_MODULE_DEFS } from '@/types';
-import { DAY2_OVERVIEW, ANCHOR_SCRIPTURE, DAY2_TRANSITIONS } from '@/lib/content';
+import { DAY1_MODULES as DAY1_MODULE_DEFS, DAY2_OVERVIEW, ANCHOR_SCRIPTURE, DAY2_TRANSITIONS } from '@/lib/content';
 import * as api from '@/lib/api';
 import { KeysModule } from './KeysModule';
 
