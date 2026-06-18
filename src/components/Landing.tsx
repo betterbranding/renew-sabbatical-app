@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Sabbatical } from '@/types';
 import { Plus, BookOpen, ChevronRight, Calendar, CheckCircle, Clock } from 'lucide-react';
-import { RENEW_LOGO_BASE64 } from '@/lib/logo';
+
 
 interface LandingProps {
   sessions: Sabbatical[];
@@ -37,10 +37,10 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020810', padding: '0' }}>
+    <div style={{ minHeight: '100vh', background: '#f8fafc', padding: '0' }}>
       {/* Hero */}
       <div className="animate-fade" style={{
-        background: 'linear-gradient(135deg, #000000 0%, #0a2540 60%, #153d6b 100%)',
+        background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 60%, #153d6b 100%)',
         padding: '60px 24px 48px',
         textAlign: 'center',
         color: 'white',
@@ -48,11 +48,19 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
         overflow: 'hidden'
       }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at 30% 20%, rgba(91,164,230,0.08) 0%, transparent 60%)', pointerEvents: 'none' }} />
-        <img
-          src={RENEW_LOGO_BASE64}
-          alt="RE:NEW"
-          style={{ width: '280px', maxWidth: '70%', height: 'auto', margin: '0 auto 12px', display: 'block', position: 'relative', filter: 'drop-shadow(0 4px 24px rgba(91,164,230,0.2))' }}
-        />
+        <div style={{
+          fontSize: '64px',
+          fontWeight: 900,
+          color: 'white',
+          letterSpacing: '-0.02em',
+          margin: '0 auto 12px',
+          position: 'relative',
+          textShadow: '0 2px 12px rgba(91,164,230,0.25), 0 4px 24px rgba(0,0,0,0.3)',
+          fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+          textTransform: 'lowercase',
+        }}>
+          re:new
+        </div>
         <p style={{ fontSize: '14px', fontWeight: 500, opacity: 0.7, margin: '0 0 24px', letterSpacing: '0.1em', textTransform: 'uppercase', position: 'relative' }}>
           Personal Sabbatical Framework
         </p>

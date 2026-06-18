@@ -596,7 +596,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'linear-gradient(135deg, #000000 0%, #0a2540 100%)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 100%)' }}>
         <div style={{ textAlign: 'center', color: 'white' }}>
           <div style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.15)', borderTopColor: '#5BA4E6', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
           <p style={{ opacity: 0.5, fontSize: '14px' }}>Loading session...</p>
@@ -610,10 +610,10 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
   const goalsForArea = (areaName: string) => healthGoals.filter(g => g.area === areaName);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#020810' }}>
+    <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
       {/* ── Session Header ── */}
       <div className="animate-fade" style={{
-        background: 'linear-gradient(135deg, #000000 0%, #0a2540 100%)',
+        background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 100%)',
         padding: '20px 20px 24px',
         color: 'white',
         borderBottom: '1px solid rgba(91,164,230,0.1)',
@@ -673,7 +673,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
           <div className="animate-fade">
             {/* Day 1 Header Card */}
             <div style={{
-              background: 'linear-gradient(135deg, #060e1e, #0c1a30)',
+              background: 'linear-gradient(135deg, #0f2744, #0c1a30)',
               borderRadius: '16px', padding: '28px 24px', marginBottom: '20px',
               border: '1px solid rgba(91,164,230,0.12)',
             }}>
@@ -713,7 +713,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
             {/* ── Section A: Day 2 Overview Card ── */}
             <div style={{
-              background: 'linear-gradient(135deg, #060e1e, #0c1a30)',
+              background: 'linear-gradient(135deg, #0f2744, #0c1a30)',
               borderRadius: '16px', padding: '28px 24px', marginBottom: '20px',
               border: '1px solid rgba(91,164,230,0.12)',
             }}>
@@ -777,7 +777,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
             {/* ── Section D: Transition Card — Stakes in the Ground ── */}
             <div style={{
-              background: 'linear-gradient(135deg, #060e1e, #0c1a30)',
+              background: 'linear-gradient(135deg, #0f2744, #0c1a30)',
               borderRadius: '16px', padding: '24px', marginTop: '28px', marginBottom: '16px',
               border: '1px solid rgba(91,164,230,0.12)',
             }}>
@@ -842,7 +842,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
             {/* ── Section G: Accountability Transition Card ── */}
             <div style={{
-              background: 'linear-gradient(135deg, #060e1e, #0c1a30)',
+              background: 'linear-gradient(135deg, #0f2744, #0c1a30)',
               borderRadius: '16px', padding: '24px', marginTop: '28px', marginBottom: '16px',
               border: '1px solid rgba(91,164,230,0.12)',
             }}>

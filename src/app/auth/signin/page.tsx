@@ -9,7 +9,7 @@ export default function SignIn() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'linear-gradient(135deg, #000000 0%, #0a2540 60%, #153d6b 100%)',
+      background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 60%, #153d6b 100%)',
       color: 'white',
       fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
     }}>
@@ -29,7 +29,7 @@ export default function SignIn() {
             padding: '14px 24px',
             fontSize: '16px',
             fontWeight: 700,
-            color: '#000000',
+            color: '#0A1628',
             background: 'white',
             border: 'none',
             borderRadius: '12px',
