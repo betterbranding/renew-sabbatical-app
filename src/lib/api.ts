@@ -1,9 +1,24 @@
 // Client-side API wrapper — replaces the old window.tasklet.sqlExec calls
 
 const debounceTimers: Record<string, ReturnType<typeof setTimeout>> = {};
+const pendingFns: Record<string, () => void> = {};
 function debounce(key: string, fn: () => void, ms = 1500) {
   if (debounceTimers[key]) clearTimeout(debounceTimers[key]);
-  debounceTimers[key] = setTimeout(fn, ms);
+  pendingFns[key] = fn;
+  debounceTimers[key] = setTimeout(() => {
+    delete pendingFns[key];
+    fn();
+  }, ms);
+}
+
+// Flush all pending saves immediately (call before navigation / page unload)
+export function flushPendingSaves() {
+  Object.keys(pendingFns).forEach(key => {
+    if (debounceTimers[key]) clearTimeout(debounceTimers[key]);
+    pendingFns[key]();
+    delete pendingFns[key];
+    delete debounceTimers[key];
+  });
 }
 
 async function fetchJSON(url: string, opts?: RequestInit) {

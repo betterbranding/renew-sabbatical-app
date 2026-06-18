@@ -327,22 +327,31 @@ export const KeysModule: React.FC<KeysModuleProps> = ({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const pendingValueRef = useRef<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const isCompleted = entry.completed === 1;
+  const isCompleted = !!entry.completed;
 
   const handleJournalChange = (val: string) => {
     setJournal(val);
+    pendingValueRef.current = val;
     setSaved(false);
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       onSaveJournal(val);
+      pendingValueRef.current = null;
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     }, 1500);
   };
 
+  // Flush pending save on unmount instead of discarding it
   useEffect(() => {
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (pendingValueRef.current !== null) {
+        onSaveJournal(pendingValueRef.current);
+      }
+    };
   }, []);
 
   // Sync journal text when entry changes externally

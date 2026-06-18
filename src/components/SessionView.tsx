@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { SabbaticalFull, KeyEntry, HealthEntry, HealthGoal, Goal, Person, Reflection, HEALTH_AREAS } from '@/types';
 import { DAY1_MODULES as DAY1_MODULE_DEFS, DAY2_OVERVIEW, ANCHOR_SCRIPTURE, DAY2_TRANSITIONS } from '@/lib/content';
 import * as api from '@/lib/api';
+import { flushPendingSaves } from '@/lib/api';
 import { KeysModule } from './KeysModule';
 
 interface SessionViewProps {
@@ -523,6 +524,16 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
   const [loading, setLoading] = useState(true);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
 
+  // Flush pending saves on unmount or page close
+  useEffect(() => {
+    const handleBeforeUnload = () => flushPendingSaves();
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      flushPendingSaves();
+    };
+  }, []);
+
   // Initialize state from the sabbatical prop (already includes all relations)
   useEffect(() => {
     try {
@@ -618,7 +629,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
         color: 'white',
         borderBottom: '1px solid rgba(91,164,230,0.1)',
       }}>
-        <button onClick={onBack} style={{
+        <button onClick={() => { flushPendingSaves(); onBack(); }} style={{
           background: 'none', border: 'none', color: 'white', cursor: 'pointer',
           display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', opacity: 0.5, marginBottom: '12px', padding: 0,
           fontFamily: 'inherit',
@@ -700,7 +711,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
                   isOpen={openModuleId === mod.id}
                   onToggleOpen={() => setOpenModuleId(openModuleId === mod.id ? null : mod.id)}
                   onSaveJournal={(text) => handleSaveKey({ ...k, userResponse: text })}
-                  onToggleComplete={() => handleSaveKey({ ...k, completed: k.completed ? 0 : 1 })}
+                  onToggleComplete={() => handleSaveKey({ ...k, completed: !k.completed })}
                 />
               );
             })}
