@@ -690,15 +690,15 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
             {/* Module Cards */}
             {keys.map((k, i) => {
-              const mod = DAY1_MODULE_DEFS.find(m => m.key === k.moduleKey);
+              const mod = DAY1_MODULE_DEFS.find(m => m.id === k.moduleKey);
               if (!mod) return null;
               return (
                 <KeysModule
                   key={k.id || k.moduleKey}
-                  moduleId={mod.key}
+                  moduleId={mod.id}
                   entry={k}
-                  isOpen={openModuleId === mod.key}
-                  onToggleOpen={() => setOpenModuleId(openModuleId === mod.key ? null : mod.key)}
+                  isOpen={openModuleId === mod.id}
+                  onToggleOpen={() => setOpenModuleId(openModuleId === mod.id ? null : mod.id)}
                   onSaveJournal={(text) => handleSaveKey({ ...k, userResponse: text })}
                   onToggleComplete={() => handleSaveKey({ ...k, completed: k.completed ? 0 : 1 })}
                 />
