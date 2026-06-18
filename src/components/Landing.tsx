@@ -116,7 +116,7 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
               <h3 style={{ fontWeight: 800, fontSize: '16px', margin: '0 0 4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.title}</h3>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', opacity: 0.5 }}>
                 <Calendar size={13} />
-                {new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                {(() => { try { const d = new Date(s.date); return isNaN(d.getTime()) ? String(s.date) : d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); } catch { return String(s.date); } })()}
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
