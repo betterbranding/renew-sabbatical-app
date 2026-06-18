@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Providers } from './providers';
+import { BottomNav } from '@/components/BottomNav';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -11,7 +12,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="has-bottom-nav">
+            {children}
+          </div>
+          <BottomNav />
+        </Providers>
       </body>
     </html>
   );

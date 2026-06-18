@@ -9,6 +9,7 @@
   --green: #22c55e;
   --purple: #a855f7;
   --pink: #ec4899;
+  --bottom-nav-height: 72px;
 }
 
 * { box-sizing: border-box; }
@@ -20,6 +21,11 @@ body {
   background: #f8fafc;
   color: white;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Add bottom padding when nav is visible */
+.has-bottom-nav {
+  padding-bottom: var(--bottom-nav-height);
 }
 
 /* ── Animations ── */
@@ -62,6 +68,58 @@ body {
 .stagger-4 { animation-delay: 0.2s; opacity: 0; }
 .stagger-5 { animation-delay: 0.25s; opacity: 0; }
 .stagger-6 { animation-delay: 0.3s; opacity: 0; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BOTTOM NAV
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-height);
+  background: linear-gradient(180deg, #0B1929 0%, #060E1A 100%);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 9999;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 6px 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  min-width: 52px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item:hover {
+  color: rgba(255,255,255,0.6);
+}
+
+.bottom-nav-active {
+  color: var(--blue-accent) !important;
+}
+
+.bottom-nav-active svg {
+  filter: drop-shadow(0 0 6px rgba(91,164,230,0.4));
+}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    MODULE CARDS — Lesson cards in Session
@@ -440,4 +498,5 @@ body {
 @media (max-width: 480px) {
   .module-card-header { padding: 16px; }
   .module-card-icon { width: 42px; height: 42px; }
+  .bottom-nav-item { min-width: 44px; font-size: 9px; }
 }

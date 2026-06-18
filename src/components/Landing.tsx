@@ -37,7 +37,7 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', padding: '0' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0A1628 0%, #0d1f35 50%, #0A1628 100%)', padding: '0' }}>
       {/* Hero */}
       <div className="animate-fade" style={{
         background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 60%, #153d6b 100%)',
