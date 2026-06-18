@@ -34,7 +34,7 @@ export default function SessionPage() {
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0A1628 0%, #1B3A5C 100%)',
+        background: 'linear-gradient(135deg, #000000 0%, #0a2540 100%)',
         color: 'white',
       }}>
         <div style={{ textAlign: 'center' }}>

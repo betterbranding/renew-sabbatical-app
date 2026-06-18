@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  --navy: #0A1628;
-  --navy-light: #1B3A5C;
-  --navy-mid: #0f2744;
+  --navy: #000000;
+  --navy-light: #0a2540;
+  --navy-mid: #060e1e;
   --blue-accent: #5BA4E6;
   --blue-glow: rgba(91, 164, 230, 0.15);
   --green: #22c55e;
@@ -17,7 +17,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background: #0d1b2a;
+  background: #020810;
   color: white;
   -webkit-font-smoothing: antialiased;
 }
@@ -67,7 +67,7 @@ body {
    MODULE CARDS — Lesson cards in Session
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .module-card {
-  background: linear-gradient(135deg, #0f2744 0%, #132d50 100%);
+  background: linear-gradient(135deg, #080c18 0%, #0c1a30 100%);
   border-radius: 16px;
   margin-bottom: 12px;
   border: 1px solid rgba(255,255,255,0.06);
@@ -87,7 +87,7 @@ body {
 
 .module-card-completed {
   border-color: rgba(34,197,94,0.2);
-  background: linear-gradient(135deg, #0a2818 0%, #0f2744 100%);
+  background: linear-gradient(135deg, #061a0e 0%, #080c18 100%);
 }
 
 .module-card-header {
@@ -208,7 +208,7 @@ body {
    DARK CARDS (base)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .dark-card {
-  background: linear-gradient(135deg, #0f2744 0%, #132d50 100%);
+  background: linear-gradient(135deg, #060e1e 0%, #0c1a30 100%);
   border-radius: 16px;
   padding: 24px;
   color: white;
@@ -229,7 +229,7 @@ body {
 
 .dark-card.completed {
   border-color: rgba(34,197,94,0.2);
-  background: linear-gradient(135deg, #0a2818 0%, #0f2744 100%);
+  background: linear-gradient(135deg, #061a0e 0%, #060e1e 100%);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

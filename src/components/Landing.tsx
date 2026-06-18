@@ -37,17 +37,17 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc', padding: '0' }}>
+    <div style={{ minHeight: '100vh', background: '#020810', padding: '0' }}>
       {/* Hero */}
       <div className="animate-fade" style={{
-        background: 'linear-gradient(135deg, #0A1628 0%, #1B3A5C 60%, #2d5a8e 100%)',
+        background: 'linear-gradient(135deg, #000000 0%, #0a2540 60%, #153d6b 100%)',
         padding: '60px 24px 48px',
         textAlign: 'center',
         color: 'white',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at 30% 20%, rgba(91,164,230,0.15) 0%, transparent 60%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at 30% 20%, rgba(91,164,230,0.08) 0%, transparent 60%)', pointerEvents: 'none' }} />
         <img
           src={RENEW_LOGO_BASE64}
           alt="RE:NEW"
@@ -98,7 +98,7 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
         )}
 
         {/* Session List */}
-        <h2 style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#94a3b8', margin: '0 0 16px' }}>
+        <h2 style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', margin: '0 0 16px' }}>
           Your Sessions ({sessions.length})
         </h2>
 
@@ -127,7 +127,7 @@ export const Landing: React.FC<LandingProps> = ({ sessions, userName, onSelectSe
         ))}
 
         {sessions.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '48px 20px', color: '#94a3b8' }}>
+          <div style={{ textAlign: 'center', padding: '48px 20px', color: 'rgba(255,255,255,0.4)' }}>
             <BookOpen size={40} style={{ opacity: 0.3, marginBottom: '12px' }} />
             <p style={{ margin: 0 }}>No sessions yet. Start your first sabbatical above.</p>
           </div>
