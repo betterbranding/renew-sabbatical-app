@@ -299,19 +299,19 @@ const HealthAreaModule: React.FC<{
     }, 1500);
   };
 
-  const handleUpdateGoal = (id: number, text: string, status: string, dueDate: string | null) => {
-    updateHealthGoal(id, text, status, dueDate);
+  const handleUpdateGoal = (id: any, text: string, status: string, dueDate: string | null) => {
+    api.updateHealthGoal(String(id), { goalText: text, status, dueDate });
     // Refresh goals after a short delay
     setTimeout(() => onGoalsChanged(), 200);
   };
 
-  const handleDeleteGoal = async (id: number) => {
-    await deleteHealthGoal(id);
+  const handleDeleteGoal = async (id: any) => {
+    await api.deleteHealthGoal(String(id));
     onGoalsChanged();
   };
 
   const handleAddGoal = async () => {
-    await addHealthGoal(sessionId, entry.area);
+    await api.addHealthGoal(sessionId, entry.area);
     onGoalsChanged();
   };
 
@@ -523,62 +523,65 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
   const [loading, setLoading] = useState(true);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
 
-  useEffect(() => { loadData(); }, [sabbatical.id]);
-
-  async function loadData() {
-    setLoading(true);
-    const [k, h, hg, g, p, r] = await Promise.all([
-      getKeysEntries(sabbatical.id),
-      getHealthEntries(sabbatical.id),
-      getHealthGoals(sabbatical.id),
-      getGoals(sabbatical.id),
-      getPeople(sabbatical.id),
-      getReflection(sabbatical.id),
-    ]);
-
-    if (k.length === 0 && h.length === 0) {
-      await seedNewSession(sabbatical.id);
-      const [k2, h2, hg2, g2, p2, r2] = await Promise.all([
-        getKeysEntries(sabbatical.id),
-        getHealthEntries(sabbatical.id),
-        getHealthGoals(sabbatical.id),
-        getGoals(sabbatical.id),
-        getPeople(sabbatical.id),
-        getReflection(sabbatical.id),
-      ]);
-      setKeys(k2); setHealth(h2); setHealthGoals(hg2); setGoals(g2); setPeople(p2); setReflection(r2);
-    } else {
-      setKeys(k); setHealth(h); setHealthGoals(hg); setGoals(g); setPeople(p); setReflection(r);
+  // Initialize state from the sabbatical prop (already includes all relations)
+  useEffect(() => {
+    try {
+      setKeys(sabbatical.keyEntries || []);
+      setHealth(sabbatical.healthEntries || []);
+      setHealthGoals(sabbatical.healthGoals || []);
+      setGoals(sabbatical.goals || []);
+      setPeople(sabbatical.people || []);
+      setReflection(sabbatical.reflections?.[0] || null);
+    } catch (err) {
+      console.error('Error initializing session data:', err);
     }
     setLoading(false);
+  }, [sabbatical.id]);
+
+  async function refreshSession() {
+    try {
+      const fresh = await api.getSession(sabbatical.id);
+      setKeys(fresh.keyEntries || []);
+      setHealth(fresh.healthEntries || []);
+      setHealthGoals(fresh.healthGoals || []);
+      setGoals(fresh.goals || []);
+      setPeople(fresh.people || []);
+      setReflection(fresh.reflections?.[0] || null);
+    } catch (err) {
+      console.error('Error refreshing session:', err);
+    }
   }
 
   async function refreshHealthGoals() {
-    const hg = await getHealthGoals(sabbatical.id);
-    setHealthGoals(hg);
+    try {
+      const fresh = await api.getSession(sabbatical.id);
+      setHealthGoals(fresh.healthGoals || []);
+    } catch (err) {
+      console.error('Error refreshing health goals:', err);
+    }
   }
 
   // ── Save Handlers ──
   function handleSaveKey(entry: KeyEntry) {
     setKeys(prev => prev.map(k => (k.id === entry.id || (k.moduleKey === entry.moduleKey && k.sabbaticalId === entry.sabbaticalId)) ? entry : k));
-    upsertKeyEntry(entry);
+    api.updateKeyEntry(entry.id, { userResponse: entry.userResponse, completed: entry.completed });
     api.updateSession(sabbatical.id, { status: 'in-progress' });
   }
   function handleSaveHealth(entry: HealthEntry) {
     setHealth(prev => prev.map(h => (h.id === entry.id || (h.area === entry.area && h.sabbaticalId === entry.sabbaticalId)) ? entry : h));
-    upsertHealthEntry(entry);
+    api.updateHealthEntry(entry.id, { assessment: entry.assessment, feelIfAccomplish: entry.feelIfAccomplish, whatIfDont: entry.whatIfDont, completed: entry.completed });
   }
   function handleSaveGoal(goal: Goal) {
     setGoals(prev => prev.map(g => (g.id === goal.id || (g.area === goal.area && g.sabbaticalId === goal.sabbaticalId)) ? goal : g));
-    upsertGoal(goal);
+    api.updateGoal(goal.id, { name: goal.name, dueDate: goal.dueDate, completed: goal.completed, notes: goal.notes });
   }
   function handleSavePerson(person: Person) {
     setPeople(prev => prev.map(p => (p.id === person.id || (p.area === person.area && p.sabbaticalId === person.sabbaticalId)) ? person : p));
-    upsertPerson(person);
+    api.updatePerson(person.id, { name: person.name, contacted: person.contacted, notes: person.notes });
   }
   function handleSaveReflection(r: Reflection) {
     setReflection(r);
-    upsertReflection(r);
+    api.updateReflection(r.id, { howWillIFeel: r.howWillIFeel, whatIfIDont: r.whatIfIDont });
   }
 
   // ── Progress ──
