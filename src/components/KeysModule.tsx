@@ -323,7 +323,7 @@ export const KeysModule: React.FC<KeysModuleProps> = ({
   const lessonModule = DAY1_MODULES.find(m => m.id === moduleId);
   if (!lessonModule) return null;
 
-  const [journal, setJournal] = useState(entry.user_response || '');
+  const [journal, setJournal] = useState(entry.userResponse || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
@@ -347,8 +347,8 @@ export const KeysModule: React.FC<KeysModuleProps> = ({
 
   // Sync journal text when entry changes externally
   useEffect(() => {
-    setJournal(entry.user_response || '');
-  }, [entry.user_response]);
+    setJournal(entry.userResponse || '');
+  }, [entry.userResponse]);
 
   return (
     <div className={`module-card ${isCompleted ? 'module-card-completed' : ''} ${isOpen ? 'module-card-open' : ''}`}>

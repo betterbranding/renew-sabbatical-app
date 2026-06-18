@@ -133,9 +133,9 @@ const HealthGoalRow: React.FC<{
   onUpdate: (id: number, text: string, status: string, dueDate: string | null) => void;
   onDelete: (id: number) => void;
 }> = ({ goal, onUpdate, onDelete }) => {
-  const [text, setText] = useState(goal.goal_text);
+  const [text, setText] = useState(goal.goalText);
   const [status, setStatus] = useState(goal.status);
-  const [dueDate, setDueDate] = useState(goal.due_date || '');
+  const [dueDate, setDueDate] = useState(goal.dueDate || '');
   const [editing, setEditing] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -278,13 +278,13 @@ const HealthAreaModule: React.FC<{
   onGoalsChanged: () => void;
 }> = ({ entry, goals, sessionId, onSaveEntry, onGoalsChanged }) => {
   const [open, setOpen] = useState(false);
-  const [feel, setFeel] = useState(entry.feel_if_accomplish || '');
-  const [what, setWhat] = useState(entry.what_if_dont || '');
+  const [feel, setFeel] = useState(entry.feelIfAccomplish || '');
+  const [what, setWhat] = useState(entry.whatIfDont || '');
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
   const color = AREA_COLORS[entry.area] || '#5BA4E6';
   const icon = AREA_ICONS[entry.area] || '🎯';
-  const goalsSet = goals.filter(g => g.goal_text.trim() !== '').length;
+  const goalsSet = goals.filter(g => g.goalText.trim() !== '').length;
   const goalsDone = goals.filter(g => g.status === 'Done').length;
 
   const handleReflectionChange = (field: 'feel' | 'what', val: string) => {
@@ -293,8 +293,8 @@ const HealthAreaModule: React.FC<{
     debounceRef.current = setTimeout(() => {
       onSaveEntry({
         ...entry,
-        feel_if_accomplish: field === 'feel' ? val : feel,
-        what_if_dont: field === 'what' ? val : what,
+        feelIfAccomplish: field === 'feel' ? val : feel,
+        whatIfDont: field === 'what' ? val : what,
       });
     }, 1500);
   };
@@ -437,14 +437,14 @@ const HealthAreaModule: React.FC<{
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const Hi5GoalRow: React.FC<{ goal: Goal; onSave: (g: Goal) => void }> = ({ goal, onSave }) => {
   const [name, setName] = useState(goal.name);
-  const [dueDate, setDueDate] = useState(goal.due_date || '');
+  const [dueDate, setDueDate] = useState(goal.dueDate || '');
   const [completed, setCompleted] = useState(goal.completed === 1);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const color = AREA_COLORS[goal.area] || '#5BA4E6';
   const icon = AREA_ICONS[goal.area] || '🎯';
 
   const save = (n: string, d: string, c: boolean) => {
-    onSave({ ...goal, name: n, due_date: d || null, completed: c ? 1 : 0 });
+    onSave({ ...goal, name: n, dueDate: d || null, completed: c ? 1 : 0 });
   };
 
   const handleNameChange = (val: string) => {
@@ -560,20 +560,20 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
   // ── Save Handlers ──
   function handleSaveKey(entry: KeyEntry) {
-    setKeys(prev => prev.map(k => (k.id === entry.id || (k.module_key === entry.module_key && k.session_id === entry.session_id)) ? entry : k));
+    setKeys(prev => prev.map(k => (k.id === entry.id || (k.moduleKey === entry.moduleKey && k.sabbaticalId === entry.sabbaticalId)) ? entry : k));
     upsertKeyEntry(entry);
     api.updateSession(sabbatical.id, { status: 'in-progress' });
   }
   function handleSaveHealth(entry: HealthEntry) {
-    setHealth(prev => prev.map(h => (h.id === entry.id || (h.area === entry.area && h.session_id === entry.session_id)) ? entry : h));
+    setHealth(prev => prev.map(h => (h.id === entry.id || (h.area === entry.area && h.sabbaticalId === entry.sabbaticalId)) ? entry : h));
     upsertHealthEntry(entry);
   }
   function handleSaveGoal(goal: Goal) {
-    setGoals(prev => prev.map(g => (g.id === goal.id || (g.area === goal.area && g.session_id === goal.session_id)) ? goal : g));
+    setGoals(prev => prev.map(g => (g.id === goal.id || (g.area === goal.area && g.sabbaticalId === goal.sabbaticalId)) ? goal : g));
     upsertGoal(goal);
   }
   function handleSavePerson(person: Person) {
-    setPeople(prev => prev.map(p => (p.id === person.id || (p.area === person.area && p.session_id === person.session_id)) ? person : p));
+    setPeople(prev => prev.map(p => (p.id === person.id || (p.area === person.area && p.sabbaticalId === person.sabbaticalId)) ? person : p));
     upsertPerson(person);
   }
   function handleSaveReflection(r: Reflection) {
@@ -584,7 +584,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
   // ── Progress ──
   const day1Progress = keys.length > 0 ? Math.round(keys.filter(k => k.completed).length / keys.length * 100) : 0;
   const day2Progress = (() => {
-    const hgSet = healthGoals.filter(g => g.goal_text.trim() !== '').length;
+    const hgSet = healthGoals.filter(g => g.goalText.trim() !== '').length;
     const gDone = goals.filter(g => g.name.trim() !== '').length;
     const pDone = people.filter(p => p.name.trim() !== '').length;
     const total = Math.max(healthGoals.length, 5) + goals.length + people.length;
@@ -687,16 +687,16 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
             {/* Module Cards */}
             {keys.map((k, i) => {
-              const mod = DAY1_MODULE_DEFS.find(m => m.key === k.module_key);
+              const mod = DAY1_MODULE_DEFS.find(m => m.key === k.moduleKey);
               if (!mod) return null;
               return (
                 <KeysModule
-                  key={k.id || k.module_key}
+                  key={k.id || k.moduleKey}
                   moduleId={mod.key}
                   entry={k}
                   isOpen={openModuleId === mod.key}
                   onToggleOpen={() => setOpenModuleId(openModuleId === mod.key ? null : mod.key)}
-                  onSaveJournal={(text) => handleSaveKey({ ...k, user_response: text })}
+                  onSaveJournal={(text) => handleSaveKey({ ...k, userResponse: text })}
                   onToggleComplete={() => handleSaveKey({ ...k, completed: k.completed ? 0 : 1 })}
                 />
               );
@@ -814,9 +814,9 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
                 </label>
                 <textarea
                   className="renew-textarea"
-                  value={reflection?.how_will_i_feel || ''}
+                  value={reflection?.howWillIFeel || ''}
                   onChange={e => {
-                    if (reflection) handleSaveReflection({ ...reflection, how_will_i_feel: e.target.value });
+                    if (reflection) handleSaveReflection({ ...reflection, howWillIFeel: e.target.value });
                   }}
                   placeholder="Describe how you'll feel when you've accomplished your goals..."
                 />
@@ -828,9 +828,9 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
                 </label>
                 <textarea
                   className="renew-textarea"
-                  value={reflection?.what_if_i_dont || ''}
+                  value={reflection?.whatIfIDont || ''}
                   onChange={e => {
-                    if (reflection) handleSaveReflection({ ...reflection, what_if_i_dont: e.target.value });
+                    if (reflection) handleSaveReflection({ ...reflection, whatIfIDont: e.target.value });
                   }}
                   placeholder="What are the consequences of inaction?"
                 />
