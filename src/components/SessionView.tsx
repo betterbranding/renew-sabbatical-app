@@ -651,11 +651,12 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
               key={d}
               onClick={() => setDay(d)}
               style={{
-                flex: 1, padding: '14px', border: 'none', borderRadius: '11px', fontWeight: 800, fontSize: '14px',
+                flex: 1, padding: '14px', borderRadius: '11px', fontWeight: 800, fontSize: '14px',
                 cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 fontFamily: 'inherit',
-                background: day === d ? '#0a2540' : 'transparent',
-                color: day === d ? 'white' : 'rgba(255,255,255,0.4)',
+                background: day === d ? '#0a2540' : 'rgba(255,255,255,0.08)',
+                color: day === d ? 'white' : 'rgba(255,255,255,0.55)',
+                border: day === d ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,255,255,0.12)',
                 transition: 'all 0.3s ease',
               }}
             >
