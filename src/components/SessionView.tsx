@@ -518,16 +518,41 @@ const SaveDay2Button: React.FC<{
     try {
       // Flush any pending debounced saves first
       flushPendingSaves();
-      // Wait a tick so the debounced fires kick off
       await new Promise(r => setTimeout(r, 50));
-      // Then do explicit immediate saves to guarantee commit
-      await Promise.all([
-        ...goals.filter(g => g.id).map(g => api.updateGoalNow(g.id, { name: g.name, dueDate: g.dueDate, completed: g.completed, notes: g.notes })),
-        ...people.filter(p => p.id).map(p => api.updatePersonNow(p.id, { name: p.name, contacted: p.contacted, notes: p.notes })),
-        ...healthGoals.filter(g => g.id).map(g => api.updateHealthGoalNow(String(g.id), { goalText: g.goalText, status: g.status, dueDate: g.dueDate })),
-        ...health.filter(h => h.id).map(h => api.updateHealthEntryNow(h.id, { assessment: h.assessment, feelIfAccomplish: h.feelIfAccomplish, whatIfDont: h.whatIfDont, completed: h.completed })),
-        reflection?.id ? api.updateReflectionNow(reflection.id, { howWillIFeel: reflection.howWillIFeel, whatIfIDont: reflection.whatIfIDont }) : Promise.resolve(),
-      ]);
+
+      const tasks: { label: string; run: () => Promise<any> }[] = [];
+      goals.filter(g => g.id).forEach(g => tasks.push({
+        label: `goal:${g.id}`,
+        run: () => api.updateGoalNow(g.id, { name: g.name, dueDate: g.dueDate, completed: g.completed, notes: g.notes }),
+      }));
+      people.filter(p => p.id).forEach(p => tasks.push({
+        label: `person:${p.id}`,
+        run: () => api.updatePersonNow(p.id, { name: p.name, contacted: p.contacted, notes: p.notes }),
+      }));
+      healthGoals.filter(g => g.id).forEach(g => tasks.push({
+        label: `healthGoal:${g.id}`,
+        run: () => api.updateHealthGoalNow(String(g.id), { goalText: g.goalText, status: g.status, dueDate: g.dueDate }),
+      }));
+      health.filter(h => h.id).forEach(h => tasks.push({
+        label: `health:${h.id}`,
+        run: () => api.updateHealthEntryNow(h.id, { assessment: h.assessment, feelIfAccomplish: h.feelIfAccomplish, whatIfDont: h.whatIfDont, completed: h.completed }),
+      }));
+      if (reflection?.id) tasks.push({
+        label: `reflection:${reflection.id}`,
+        run: () => api.updateReflectionNow(reflection.id, { howWillIFeel: reflection.howWillIFeel, whatIfIDont: reflection.whatIfIDont }),
+      });
+
+      const results = await Promise.allSettled(tasks.map(t => t.run()));
+      const failed = results
+        .map((r, i) => ({ r, t: tasks[i] }))
+        .filter(x => x.r.status === 'rejected');
+      if (failed.length) {
+        console.error('[SaveDay2] failures:', failed.map(f => ({ label: f.t.label, err: (f.r as PromiseRejectedResult).reason?.message || f.r })));
+        // If literally everything failed → hard error. Otherwise treat as partial success
+        // (un-saved items are usually rows that don't exist yet — auto-save will create them on next edit).
+        if (failed.length === tasks.length) throw new Error(`All ${tasks.length} saves failed`);
+      }
+
       if (alsoMarkComplete) {
         await api.updateSession(sessionId, { status: 'complete' });
         onCompleteChange(true);
@@ -607,6 +632,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
   const [reflection, setReflection] = useState<Reflection | null>(null);
   const [loading, setLoading] = useState(true);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
+  const [day2Complete, setDay2Complete] = useState(sabbatical.status === 'complete');
 
   // Flush pending saves on unmount or page close
   useEffect(() => {

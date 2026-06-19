@@ -16,13 +16,13 @@ export function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Hide on sign-in page and inside individual sessions
-  if (pathname?.startsWith('/auth') || pathname?.startsWith('/session/')) return null;
+  // Hide only on sign-in page; show inside session views too
+  if (pathname?.startsWith('/auth')) return null;
 
   const activeKey = NAV_ITEMS.find(item => {
     if (item.path === '/') return pathname === '/';
     return pathname?.startsWith(item.path);
-  })?.key || 'home';
+  })?.key || (pathname?.startsWith('/session/') ? 'sessions' : 'home');
 
   return (
     <nav className="bottom-nav">
