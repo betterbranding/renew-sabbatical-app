@@ -621,7 +621,7 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
   const goalsForArea = (areaName: string) => healthGoals.filter(g => g.area === areaName);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0A1628 0%, #1B3A5C 100%)', color: 'white' }}>
       {/* ── Session Header ── */}
       <div className="animate-fade" style={{
         background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 100%)',
