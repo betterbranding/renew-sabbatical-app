@@ -25,7 +25,7 @@ const TRACKS: SoundTrack[] = [
   { id: 'focus',           title: 'Focus & Clarity',    subtitle: 'Lo-fi study · 15 Hz beta · Mental sharpness',   icon: '🎯', frequency: '15 Hz Beta',  color: '#22c55e', file: 'focus.mp3' },
   { id: 'deep-rest',       title: 'Deep Rest',          subtitle: 'Ambient drone · 2.5 Hz delta · Restorative calm', icon: '🌙', frequency: '2.5 Hz Delta', color: '#5BE6A4', file: 'deep_rest.mp3' },
   { id: 'scripture',       title: 'Scripture Ambience', subtitle: 'Cinematic sacred strings · 7 Hz theta',         icon: '📖', frequency: '7 Hz Theta',  color: '#E6855B', file: 'scripture.mp3' },
-  { id: 'nature-calm',     title: 'Nature Calm',        subtitle: 'Pad with wind & rain · 9 Hz alpha · Restful',   icon: '🌿', frequency: '9 Hz Alpha',  color: '#f59e0b', file: 'nature_calm.mp3' },
+  { id: 'be-still',        title: 'Be Still',           subtitle: 'Pad with wind & rain · 999 Hz solfeggio · Stillness', icon: '🌿', frequency: '999 Hz',      color: '#f59e0b', file: 'be_still.mp3' },
 ];
 
 export default function SoundsPage() {
