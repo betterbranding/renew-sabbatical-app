@@ -178,11 +178,31 @@ export default function TrackerPage() {
                             }}>
                               {goal.goalText}
                             </div>
-                            {goal.dueDate && (
-                              <div style={{ fontSize: '11px', opacity: 0.35, marginTop: '3px' }}>
-                                📅 {(() => { try { const d = new Date(goal.dueDate); return isNaN(d.getTime()) ? goal.dueDate : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); } catch { return goal.dueDate; } })()}
-                              </div>
-                            )}
+                            <div style={{ marginTop: '4px', position: 'relative', display: 'inline-block' }}>
+                              <span
+                                onClick={() => {
+                                  const el = document.getElementById(`tr-date-${goal.id}`);
+                                  if (el) (el as HTMLInputElement).showPicker?.();
+                                }}
+                                style={{ fontSize: '11px', color: goal.dueDate ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.25)', cursor: 'pointer' }}
+                                title="Click to set due date"
+                              >
+                                {goal.dueDate
+                                  ? `📅 ${(() => { try { const d = new Date(goal.dueDate); return isNaN(d.getTime()) ? goal.dueDate : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch { return goal.dueDate; } })()}`
+                                  : '+ due date'}
+                              </span>
+                              <input
+                                id={`tr-date-${goal.id}`}
+                                type="date"
+                                value={goal.dueDate || ''}
+                                onChange={e => {
+                                  const v = e.target.value || null;
+                                  setGoals(prev => prev.map(g => g.id === goal.id ? { ...g, dueDate: v } : g));
+                                  api.updateHealthGoal(goal.id, { dueDate: v });
+                                }}
+                                style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+                              />
+                            </div>
                           </div>
                         </div>
                       );
