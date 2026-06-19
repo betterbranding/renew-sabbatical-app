@@ -234,35 +234,27 @@ const HealthGoalRow: React.FC<{
           <option value="In progress" style={{ background: '#0c1a30', color: 'white' }}>In progress</option>
           <option value="Done" style={{ background: '#0c1a30', color: 'white' }}>Done</option>
         </select>
-        {dueDate ? (
-          <span
-            onClick={() => {
-              const el = document.getElementById(`date-${goal.id}`);
-              if (el) (el as HTMLInputElement).showPicker?.();
-            }}
-            style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', cursor: 'pointer' }}
-            title="Click to change date"
-          >
-            📅 {formatDate(dueDate)}
+        <label style={{
+          display: 'inline-flex', alignItems: 'center', gap: '4px', cursor: 'pointer',
+          fontSize: '10px', color: dueDate ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.4)',
+          background: 'rgba(255,255,255,0.05)', padding: '3px 8px', borderRadius: '6px',
+          border: '1px solid rgba(255,255,255,0.08)', position: 'relative', userSelect: 'none',
+        }}>
+          <span style={{ pointerEvents: 'none' }}>
+            {dueDate ? `📅 ${formatDate(dueDate)}` : '📅 + due date'}
           </span>
-        ) : (
-          <span
-            onClick={() => {
-              const el = document.getElementById(`date-${goal.id}`);
-              if (el) (el as HTMLInputElement).showPicker?.();
-            }}
-            style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', cursor: 'pointer' }}
-          >
-            + due date
-          </span>
-        )}
-        <input
-          id={`date-${goal.id}`}
-          type="date"
-          value={dueDate}
-          onChange={e => handleDateChange(e.target.value)}
-          style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
-        />
+          <input
+            type="date"
+            value={dueDate}
+            onChange={e => handleDateChange(e.target.value)}
+            style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              opacity: 0, cursor: 'pointer', border: 'none', padding: 0, margin: 0,
+              fontSize: '16px', // prevent iOS zoom
+              colorScheme: 'dark',
+            } as any}
+          />
+        </label>
       </div>
     </div>
   );
@@ -505,6 +497,57 @@ const PersonRow: React.FC<{ person: Person; onSave: (p: Person) => void }> = ({ 
         <div className={`renew-check ${contacted ? 'checked' : ''}`} onClick={() => { const next = !contacted; setContacted(next); onSave({ ...person, name, contacted: next ? 1 : 0 }); }} title="Agreed to help" />
         <input className="renew-input" value={name} onChange={e => handleNameChange(e.target.value)} placeholder="Enter person's name..." style={{ flex: 1 }} />
       </div>
+    </div>
+  );
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SAVE DAY 2 BUTTON
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SaveDay2Button: React.FC<{
+  goals: Goal[]; people: Person[]; reflection: Reflection | null;
+  healthGoals: HealthGoal[]; health: HealthEntry[];
+}> = ({ goals, people, reflection, healthGoals, health }) => {
+  const [state, setState] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+  const save = async () => {
+    setState('saving');
+    try {
+      await Promise.all([
+        ...goals.filter(g => g.id).map(g => api.updateGoal(g.id, { name: g.name, dueDate: g.dueDate, completed: g.completed, notes: g.notes })),
+        ...people.filter(p => p.id).map(p => api.updatePerson(p.id, { name: p.name, contacted: p.contacted, notes: p.notes })),
+        ...healthGoals.filter(g => g.id).map(g => api.updateHealthGoal(String(g.id), { goalText: g.goalText, status: g.status, dueDate: g.dueDate })),
+        ...health.filter(h => h.id).map(h => api.updateHealthEntry(h.id, { assessment: h.assessment, feelIfAccomplish: h.feelIfAccomplish, whatIfDont: h.whatIfDont, completed: h.completed })),
+        reflection?.id ? api.updateReflection(reflection.id, { howWillIFeel: reflection.howWillIFeel, whatIfIDont: reflection.whatIfIDont }) : null,
+      ]);
+      setState('saved');
+      setTimeout(() => setState('idle'), 2500);
+    } catch {
+      setState('idle');
+    }
+  };
+
+  const label = state === 'saving' ? 'Saving...' : state === 'saved' ? '✓ Saved' : '💾 Save All Day 2 Changes';
+  const bg = state === 'saved' ? 'rgba(34,197,94,0.18)' : 'linear-gradient(135deg, #5BA4E6, #3b82f6)';
+  const border = state === 'saved' ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(91,164,230,0.4)';
+
+  return (
+    <div style={{ marginTop: '24px', marginBottom: '8px' }}>
+      <button
+        onClick={save}
+        disabled={state === 'saving'}
+        style={{
+          width: '100%', padding: '14px', background: bg, border, borderRadius: '12px',
+          color: 'white', fontSize: '15px', fontWeight: 800, fontFamily: 'inherit',
+          cursor: state === 'saving' ? 'wait' : 'pointer', letterSpacing: '0.02em',
+          transition: 'all 0.2s ease',
+        }}
+      >
+        {label}
+      </button>
+      <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', textAlign: 'center', margin: '8px 0 0' }}>
+        Changes auto-save as you type — tap to confirm everything is committed.
+      </p>
     </div>
   );
 };
@@ -899,6 +942,15 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
                 <PersonRow key={p.id || i} person={p} onSave={handleSavePerson} />
               ))}
             </div>
+
+            {/* ── Save Day 2 ── */}
+            <SaveDay2Button
+              goals={goals}
+              people={people}
+              reflection={reflection}
+              healthGoals={healthGoals}
+              health={health}
+            />
 
           </div>
         )}

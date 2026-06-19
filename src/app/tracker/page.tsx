@@ -178,21 +178,19 @@ export default function TrackerPage() {
                             }}>
                               {goal.goalText}
                             </div>
-                            <div style={{ marginTop: '4px', position: 'relative', display: 'inline-block' }}>
-                              <span
-                                onClick={() => {
-                                  const el = document.getElementById(`tr-date-${goal.id}`);
-                                  if (el) (el as HTMLInputElement).showPicker?.();
-                                }}
-                                style={{ fontSize: '11px', color: goal.dueDate ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.25)', cursor: 'pointer' }}
-                                title="Click to set due date"
-                              >
+                            <label style={{
+                              marginTop: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px',
+                              cursor: 'pointer', fontSize: '11px',
+                              color: goal.dueDate ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)',
+                              background: 'rgba(255,255,255,0.05)', padding: '3px 8px', borderRadius: '6px',
+                              border: '1px solid rgba(255,255,255,0.08)', position: 'relative', userSelect: 'none',
+                            }}>
+                              <span style={{ pointerEvents: 'none' }}>
                                 {goal.dueDate
                                   ? `📅 ${(() => { try { const d = new Date(goal.dueDate); return isNaN(d.getTime()) ? goal.dueDate : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch { return goal.dueDate; } })()}`
-                                  : '+ due date'}
+                                  : '📅 + due date'}
                               </span>
                               <input
-                                id={`tr-date-${goal.id}`}
                                 type="date"
                                 value={goal.dueDate || ''}
                                 onChange={e => {
@@ -200,9 +198,9 @@ export default function TrackerPage() {
                                   setGoals(prev => prev.map(g => g.id === goal.id ? { ...g, dueDate: v } : g));
                                   api.updateHealthGoal(goal.id, { dueDate: v });
                                 }}
-                                style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+                                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer', border: 'none', padding: 0, margin: 0, fontSize: '16px', colorScheme: 'dark' } as any}
                               />
-                            </div>
+                            </label>
                           </div>
                         </div>
                       );
