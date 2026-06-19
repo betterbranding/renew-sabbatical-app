@@ -266,9 +266,7 @@ Now take a minute to just sit, and receive. Get in a posture ready to receive wi
 
 **6. Generational curses.** Negative patterns passed down from generation to generation — poverty, addiction, sickness. These can be broken through the power of Jesus Christ.
 
-**7. Traumas.** Traumatic experiences can lead to emotional and physical problems, as well as spiritual strongholds.
-
-Go to [thepathwaytofreedom.org](https://thepathwaytofreedom.org) to order the book and schedule a personal ministry session.`
+**7. Traumas.** Traumatic experiences can lead to emotional and physical problems, as well as spiritual strongholds.`
       }
     ],
     journalPrompt: 'What did the Lord reveal to you during confession and forgiveness? What are you releasing today?'
