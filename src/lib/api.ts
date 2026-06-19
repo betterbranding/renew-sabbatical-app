@@ -88,3 +88,17 @@ export const updateReflection = (id: string, data: Record<string, any>) => {
     fetchJSON('/api/reflections', { method: 'PATCH', body: JSON.stringify({ id, ...data }) });
   });
 };
+
+// ── Immediate (non-debounced) versions used by Save All button ──
+export const updateKeyEntryNow = (id: string, data: Record<string, any>) =>
+  fetchJSON('/api/keys', { method: 'PATCH', body: JSON.stringify({ id, ...data }) });
+export const updateHealthEntryNow = (id: string, data: Record<string, any>) =>
+  fetchJSON('/api/health', { method: 'PATCH', body: JSON.stringify({ id, ...data }) });
+export const updateHealthGoalNow = (id: string, data: Record<string, any>) =>
+  fetchJSON(`/api/health-goals/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+export const updateGoalNow = (id: string, data: Record<string, any>) =>
+  fetchJSON('/api/goals', { method: 'PATCH', body: JSON.stringify({ id, ...data }) });
+export const updatePersonNow = (id: string, data: Record<string, any>) =>
+  fetchJSON('/api/people', { method: 'PATCH', body: JSON.stringify({ id, ...data }) });
+export const updateReflectionNow = (id: string, data: Record<string, any>) =>
+  fetchJSON('/api/reflections', { method: 'PATCH', body: JSON.stringify({ id, ...data }) });

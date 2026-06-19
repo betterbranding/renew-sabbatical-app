@@ -505,36 +505,50 @@ const PersonRow: React.FC<{ person: Person; onSave: (p: Person) => void }> = ({ 
 // SAVE DAY 2 BUTTON
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const SaveDay2Button: React.FC<{
+  sessionId: string;
   goals: Goal[]; people: Person[]; reflection: Reflection | null;
   healthGoals: HealthGoal[]; health: HealthEntry[];
-}> = ({ goals, people, reflection, healthGoals, health }) => {
-  const [state, setState] = useState<'idle' | 'saving' | 'saved'>('idle');
+  isComplete: boolean;
+  onCompleteChange: (complete: boolean) => void;
+}> = ({ sessionId, goals, people, reflection, healthGoals, health, isComplete, onCompleteChange }) => {
+  const [state, setState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  const save = async () => {
+  const save = async (alsoMarkComplete: boolean) => {
     setState('saving');
     try {
+      // Flush any pending debounced saves first
+      flushPendingSaves();
+      // Wait a tick so the debounced fires kick off
+      await new Promise(r => setTimeout(r, 50));
+      // Then do explicit immediate saves to guarantee commit
       await Promise.all([
-        ...goals.filter(g => g.id).map(g => api.updateGoal(g.id, { name: g.name, dueDate: g.dueDate, completed: g.completed, notes: g.notes })),
-        ...people.filter(p => p.id).map(p => api.updatePerson(p.id, { name: p.name, contacted: p.contacted, notes: p.notes })),
-        ...healthGoals.filter(g => g.id).map(g => api.updateHealthGoal(String(g.id), { goalText: g.goalText, status: g.status, dueDate: g.dueDate })),
-        ...health.filter(h => h.id).map(h => api.updateHealthEntry(h.id, { assessment: h.assessment, feelIfAccomplish: h.feelIfAccomplish, whatIfDont: h.whatIfDont, completed: h.completed })),
-        reflection?.id ? api.updateReflection(reflection.id, { howWillIFeel: reflection.howWillIFeel, whatIfIDont: reflection.whatIfIDont }) : null,
+        ...goals.filter(g => g.id).map(g => api.updateGoalNow(g.id, { name: g.name, dueDate: g.dueDate, completed: g.completed, notes: g.notes })),
+        ...people.filter(p => p.id).map(p => api.updatePersonNow(p.id, { name: p.name, contacted: p.contacted, notes: p.notes })),
+        ...healthGoals.filter(g => g.id).map(g => api.updateHealthGoalNow(String(g.id), { goalText: g.goalText, status: g.status, dueDate: g.dueDate })),
+        ...health.filter(h => h.id).map(h => api.updateHealthEntryNow(h.id, { assessment: h.assessment, feelIfAccomplish: h.feelIfAccomplish, whatIfDont: h.whatIfDont, completed: h.completed })),
+        reflection?.id ? api.updateReflectionNow(reflection.id, { howWillIFeel: reflection.howWillIFeel, whatIfIDont: reflection.whatIfIDont }) : Promise.resolve(),
       ]);
+      if (alsoMarkComplete) {
+        await api.updateSession(sessionId, { status: 'complete' });
+        onCompleteChange(true);
+      }
       setState('saved');
       setTimeout(() => setState('idle'), 2500);
-    } catch {
-      setState('idle');
+    } catch (err) {
+      console.error('Save failed:', err);
+      setState('error');
+      setTimeout(() => setState('idle'), 3000);
     }
   };
 
-  const label = state === 'saving' ? 'Saving...' : state === 'saved' ? '✓ Saved' : '💾 Save All Day 2 Changes';
+  const label = state === 'saving' ? 'Saving...' : state === 'saved' ? '✓ Saved' : state === 'error' ? '⚠️ Save failed — try again' : '💾 Save All Day 2 Changes';
   const bg = state === 'saved' ? 'rgba(34,197,94,0.18)' : 'linear-gradient(135deg, #5BA4E6, #3b82f6)';
   const border = state === 'saved' ? '1px solid rgba(34,197,94,0.4)' : '1px solid rgba(91,164,230,0.4)';
 
   return (
-    <div style={{ marginTop: '24px', marginBottom: '8px' }}>
+    <div style={{ marginTop: '24px', marginBottom: '8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <button
-        onClick={save}
+        onClick={() => save(false)}
         disabled={state === 'saving'}
         style={{
           width: '100%', padding: '14px', background: bg, border, borderRadius: '12px',
@@ -545,8 +559,35 @@ const SaveDay2Button: React.FC<{
       >
         {label}
       </button>
-      <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', textAlign: 'center', margin: '8px 0 0' }}>
-        Changes auto-save as you type — tap to confirm everything is committed.
+      {isComplete ? (
+        <div style={{
+          padding: '12px', background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.35)',
+          borderRadius: '12px', textAlign: 'center', color: '#86efac', fontSize: '14px', fontWeight: 700,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+        }}>
+          <span>✅ Day 2 marked complete</span>
+          <button
+            onClick={async () => { await api.updateSession(sessionId, { status: 'in-progress' }); onCompleteChange(false); }}
+            style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '12px', textDecoration: 'underline', cursor: 'pointer', padding: 0 }}
+          >Undo</button>
+        </div>
+      ) : (
+        <button
+          onClick={() => save(true)}
+          disabled={state === 'saving'}
+          style={{
+            width: '100%', padding: '14px',
+            background: 'linear-gradient(135deg, #16a34a, #15803d)',
+            border: '1px solid rgba(34,197,94,0.5)', borderRadius: '12px',
+            color: 'white', fontSize: '15px', fontWeight: 800, fontFamily: 'inherit',
+            cursor: state === 'saving' ? 'wait' : 'pointer', letterSpacing: '0.02em',
+          }}
+        >
+          ✅ Save & Mark Day 2 Complete
+        </button>
+      )}
+      <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', textAlign: 'center', margin: 0 }}>
+        Changes auto-save as you type — tap Save to confirm everything is committed.
       </p>
     </div>
   );
