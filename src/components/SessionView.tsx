@@ -622,6 +622,30 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0A1628 0%, #1B3A5C 100%)', color: 'white' }}>
+      {/* ── Sticky Top Bar ── */}
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 50,
+        background: 'rgba(10,22,40,0.92)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(91,164,230,0.15)',
+        padding: '12px 16px',
+        display: 'flex', alignItems: 'center', gap: '12px',
+      }}>
+        <button onClick={() => { flushPendingSaves(); onBack(); }} style={{
+          background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+          color: 'white', cursor: 'pointer', borderRadius: '10px',
+          display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600,
+          padding: '8px 12px', fontFamily: 'inherit', flexShrink: 0,
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Sessions
+        </button>
+        <div style={{ fontSize: '14px', fontWeight: 700, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {sabbatical.title}
+        </div>
+      </div>
+
       {/* ── Session Header ── */}
       <div className="animate-fade" style={{
         background: 'linear-gradient(135deg, #0A1628 0%, #0a2540 100%)',
@@ -629,14 +653,6 @@ export const SessionView: React.FC<SessionViewProps> = ({ sabbatical, onBack, on
         color: 'white',
         borderBottom: '1px solid rgba(91,164,230,0.1)',
       }}>
-        <button onClick={() => { flushPendingSaves(); onBack(); }} style={{
-          background: 'none', border: 'none', color: 'white', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', opacity: 0.5, marginBottom: '12px', padding: 0,
-          fontFamily: 'inherit',
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-          All Sessions
-        </button>
         <h1 style={{ fontSize: '28px', fontWeight: 900, margin: '0 0 4px', letterSpacing: '-0.02em' }}>{sabbatical.title}</h1>
         <p style={{ fontSize: '13px', opacity: 0.4, margin: 0 }}>
           {new Date(sabbatical.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
